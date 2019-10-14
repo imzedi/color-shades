@@ -9,9 +9,10 @@ class Shade {
 
 	get(background,foreground,opacity) {
 
-		opacity = Number(opacity)
-		opacity = opacity < 100 ? opacity : 100
-		opacity /= 100
+// 		uncomment to apply limit
+// 		opacity = Number(opacity)
+// 		opacity = opacity < 100 ? opacity : 100
+// 		opacity /= 100
 
 		let R_back = this.HexToDec(background,'R');
 		let G_back = this.HexToDec(background,'G');
