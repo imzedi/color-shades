@@ -1,136 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>IconScout 3</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta charset="UTF-8">
+    <title>IconScout 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style type="text/css">
+    .picker {
+        padding: 2px;
+        display: block;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        width: 80%;
+        height: 50px;
+    }
 
-	<style type="text/css">
-		.picker {
-			padding: 2px;
-		    display: block;
-		    border: none;
-		    border-bottom: 1px solid #ccc;
-		    width: 80%;
-		    height: 50px;
-		}
+    .box {
+        display: block;
+        /*background-color: red;*/
+        width: 120px;
+        height: 120px;
+    }
 
-		.box {
-			display: block;
-			/*background-color: red;*/
-			width: 120px;
-			height: 120px;
-		}
+    .box p {
+        margin-top: 50px;
+        font-size: 10px;
+        padding: 2px;
+        background-color: #fff;
+        color: #656565;
+        font-weight: bold;
 
-		.box p {
-			margin-top: 50px;
-			font-size: 10px;
-			padding: 2px;
-			background-color: #fff;
-			color: #656565;
-			font-weight: bold; 
-
-		} 
-	</style>
-
+    }
+    </style>
 </head>
+
 <body>
-	<div class="w3-row w3-border">
-	  <div class="w3-container w3-half">
-	  	<div class="w3-container">
-			<div class="w3-container w3-margin">
-			  <h3>Pick Colors</h3>
-			</div>
+    <div class="w3-row w3-border">
+        <div class="w3-container w3-half">
+            <div class="w3-container">
+                <div class="w3-container w3-margin">
+                    <h3>Pick Colors</h3>
+                </div>
+                <form class="w3-container" id="pickForm" onsubmit="event.preventDefault(); getShades();">
+                    <P>
+                        <label class="w3-margin">Select Background</label>
+                        <input class="w3-input picker w3-margin" type="color" name="background" value="#cccccc">
+                    </P>
+                    <p>
+                        <label class="w3-margin">Select Foreground</label>
+                        <input class="w3-input picker w3-margin" type="color" name="foreground" value="#cccccc">
+                    </p>
+                    <p>
+                        <label class="w3-margin">Shades in % <small> (Seperate by coma)</small></label>
+                        <input class="w3-input picker w3-margin" placeholder="25,50,75" type="text" name="opacity">
+                    </p>
+                    <button type="submit" class="w3-margin w3-btn w3-blue w3-round">Get Shades</button>
+                    <br />
+                    <br />
+                </form>
+            </div>
+        </div>
+        <div class="w3-container w3-half">
+            <div class="w3-container w3-margin">
+                <h3>Output Shades</h3>
+            </div>
+            <div class="w3-row w3-center w3-padding" id="outputDiv">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script.js"></script>
+    <script>
+    function getShades() {
 
-			<form class="w3-container" id="pickForm" onsubmit="event.preventDefault(); getShades();">
-			  <P>
-			  	<label class="w3-margin">Select Background</label>
-			  	<input class="w3-input picker w3-margin" type="color" name="background" value="#cccccc">
-			  </P>
+        let myForm = document.getElementById("pickForm");
+        let background = myForm.background.value;
+        let foreground = myForm.foreground.value;
+        let opacity = (myForm.opacity.value).split(',');
 
-			  <p>
-			  	<label class="w3-margin">Select Foreground</label>
-			  	<input class="w3-input picker w3-margin" type="color" name="foreground" value="#cccccc"> 
-			  </p>
+        if (!(background && foreground && myForm.opacity.value)) {
+            alert('Insert required fields')
+            return false
+        }
 
-			  <button type="submit" class="w3-margin w3-btn w3-blue w3-round">Get Shades</button>
-			  <br />
-			  <br />
-			</form>
+        let output = [];
 
-		</div>
+        for (var i = 0; i < opacity.length; i++) {
 
-	  </div>
+            if (opacity[i] && (Number(opacity[i]) >= 0)) {
 
-	  <div class="w3-container w3-half">
-	  	<div class="w3-container w3-margin">
-		  <h3>Output Shades</h3>
-		</div>
+                opacity[i] = opacity[i] < 100 ? opacity[i] : 100;
+                let opacityValue = opacity[i] / 100;
 
-		<div class="w3-row w3-center w3-padding">
-			<div class="w3-third w3-round w3-padding">
-				<div class="box w3-container w3-round" id="box25">
-					<p class="w3-card w3-round">25%</p>
-				</div>
-				<div class="w3-left w3-small">
-					<p id="colorCode25"> </p>
-				</div>
-			</div>
-			<div class="w3-third w3-round w3-padding">
-				<div class="box w3-container w3-round" id="box50">
-					<p class="w3-card w3-round">50%</p>
-				</div>
-				<div class="w3-left w3-small">
-					<p id="colorCode50"> </p>
-				</div>				
-			</div>
-			<div class="w3-third w3-round w3-padding">
-				<div class="box w3-container w3-round" id="box75">
-					<p class="w3-card w3-round">75%</p>
-				</div>
-				<div class="w3-left w3-small">
-					<p id="colorCode75"> </p>
-				</div>				
-			</div>	
-		</div>
+                output[opacity[i]] = MyShade.get(background, foreground, opacityValue);
+            }
+        }
 
-	  </div>
-	</div>
+        console.log(output);
+        updateShade(output);
+    }
 
-<script type="text/javascript" src="script.js"></script>
-<script>
-	
-function getShades() {
+    function updateShade(output) {
 
-	let myForm = document.getElementById("pickForm") 
-	let background = myForm.background.value
-	let foreground = myForm.foreground.value
+        let container = document.getElementById("outputDiv");
 
-	let output = []
+        //removing old child	
 
-	output['opacity25'] = MyShade.get(background,foreground,25)
-	output['opacity50'] = MyShade.get(background,foreground,50)
-	output['opacity75'] = MyShade.get(background,foreground,75)
+        let child = container.lastElementChild;
 
-	console.log(output)
+        while (child) {
+            container.removeChild(child);
+            child = container.lastElementChild;
+        }
 
-	updateShade(output);
-}
+        for (var i in output) {
 
-function updateShade(output) {
-	console.log('sdssdsd')
-	console.log(output['opacity25'][0])
+            let firstDiv = document.createElement("div");
+            firstDiv.className = 'w3-third w3-round w3-padding';
 
-	document.getElementById("box25").style.background  = output['opacity25'][0];
-	document.getElementById("box50").style.background  = output['opacity50'][0];
-	document.getElementById("box75").style.background  = output['opacity75'][0];
+            let boxDiv = document.createElement("div");
+            let codeDiv = document.createElement("div");
 
-	document.getElementById("colorCode25").innerHTML = output['opacity25'][0] +'<br />'+ output['opacity25'][1]
-	document.getElementById("colorCode50").innerHTML = output['opacity50'][0] +'<br />'+ output['opacity25'][1]
-	document.getElementById("colorCode75").innerHTML = output['opacity75'][0] +'<br />'+ output['opacity25'][1]	
-}
+            boxDiv.className = 'box w3-container w3-round';
+            codeDiv.className = 'w3-left w3-small';
 
-</script>
+            boxDiv.style.backgroundColor = output[i][0];
+
+            let boxDivP = document.createElement("p");
+            let codeDivP = document.createElement("p");
+
+            boxDivP.className = 'w3-card w3-round';
+
+            boxDivP.appendChild(document.createTextNode(i));
+            codeDivP.innerHTML = (output[i][0] + '<br />' + output[i][1]);
+
+            boxDiv.appendChild(boxDivP);
+            codeDiv.appendChild(codeDivP);
+
+            firstDiv.appendChild(boxDiv);
+            firstDiv.appendChild(codeDiv);
+
+            container.appendChild(firstDiv);
+        }
+    }
+    </script>
 </body>
 </html>
